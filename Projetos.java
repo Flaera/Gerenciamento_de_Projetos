@@ -31,9 +31,9 @@ public class Projetos{
         int acc = 0;
         while(this.users[acc].getName().equals("-1")!=true)
         {
-            System.out.print(this.users[acc]);
+            System.out.print(this.users[acc].getName()+"("+this.users[acc].getEmail()+", "+this.users[acc].getPayment()+", "+this.users[acc].getStatus()+")");
             acc++;
-            if (this.users[acc].getName().equals("-1")!=true){System.out.print(", ");}
+            if (this.users[acc].getName().equals("-1")!=true){System.out.print("; ");}
         }
 
         System.out.print("\nCoord.: ");
@@ -62,6 +62,16 @@ public class Projetos{
         }
         return acc;
     }
+    public User getUserPointer(String user){
+        int acc = 0;
+        while(this.users[acc].getName().equals("-1")!=true){
+            if (this.users[acc].getName().equals(user)==true){
+                return this.users[acc];
+            }
+            acc++;
+        }
+        return null;
+    }
     public User[] getUsers(){return this.users;}
     public int getLenghtUsers(){
         int acc=0;while(this.users[acc].getName().equals("-1")!=true){acc++;}return acc;
@@ -88,11 +98,12 @@ public class Projetos{
     }
     public void addUser(User user){
         int acc = 0;
-        while(this.users[acc].equals("-1")==false){acc+=1;}
+        while(this.users[acc].getName().equals("-1")==false){acc+=1;}
         // acc+=1;
         this.users[acc] = user;
         acc++;
-        this.users[acc].setName("-1");
+        String final_name = "-1";
+        this.users[acc] = new User(final_name);
     }
     static public void main(String[] args){
         return;
