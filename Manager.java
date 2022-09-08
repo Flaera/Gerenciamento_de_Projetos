@@ -27,6 +27,7 @@ public class Manager{
         System.out.println("Digite 10 para consultar por usuária(o).");
         System.out.println("Digite 11 para consultar por ID de projeto.");
         System.out.println("Digite 12 para consultar por atividade.");
+        System.out.println("Digite 13 para intercambiar um usuário para um projeto.");
         System.out.println("Digite 0 para sair do programa.");
     }
     public static int taskExist(String task){
@@ -69,7 +70,7 @@ public class Manager{
             System.out.print("Digite se a(o) "+(acc+1)+"ª usuária(o) é aluna(o), professora(or) ou pesquisadora(or): ");
             UserStatus type = UserStatus.valueOf(opt.nextLine().toUpperCase());
 
-            scan1[acc] = new User(name1, email1, "123", type, 0.0);
+            scan1[acc] = new User(name1, email1, "123", type, 0.0, AllocatorStatus.DEFINITIVE);
             // acc+=1;
             // opt.nextLine();
             // System.out.println(scan1[acc]);
@@ -292,10 +293,40 @@ public class Manager{
                 }
                 if (finded==false){System.out.println("Erro. Nenhum resultado encontrado.");}
             }
-            else if (option==12){
+            else if (option==13){
                 System.out.println("Escolhida a opção 13.");
 
-                
+                System.out.println("Digite a(o) usuária(o) que deseja intercambiar:");
+                String user13 = opt.nextLine();
+                // User user13Pointer = new User(user13);
+                System.out.println("Digite o ID do projeto que vai receber a(o) intercambista:");
+                int id13 = Integer.parseInt(opt.nextLine());
+                boolean error = false;
+                if (projectExist(id13)==true){
+                    //System.out.println("HERE1");
+                    // System.out.println("id:"+projects[id13].getUsers());
+                    // System.out.println("userExist:"+projects[id13].userExist(user13Pointer));
+                    int id13_1 = -1;
+                    for (int i=0; i<acc_projects; i++){
+                        User[] users13_2 = projects[i].getUsers();
+                        int acc13 = 0;
+                        while(users13_2[acc13].getName().equals("-1")!=true){
+                            if (user13.equals(users13_2[acc13].getName())==true){id13_1=acc13;break;}
+                            acc13++;
+                        }
+                        if(id13_1!=-1){break;}
+                    }
+                    if (id13_1!=-1){
+                        // System.out.println("HERE2");
+                        User user13_searched = projects[id13_1].getUserPointer(user13);
+                        projects[id13].addUser(user13_searched, AllocatorStatus.INTERCAMBISTA);
+                        System.out.println("Intercâmbio feito.");
+                    }
+                    else {error=true;}
+                }
+                if (error==true){
+                    System.out.println("Erro. Projeto não existe ou usuário não existe.");
+                }
             }
             else if (option==0){opt.close();return;}
         }

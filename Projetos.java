@@ -31,7 +31,7 @@ public class Projetos{
         int acc = 0;
         while(this.users[acc].getName().equals("-1")!=true)
         {
-            System.out.print(this.users[acc].getName()+"("+this.users[acc].getEmail()+", "+this.users[acc].getPayment()+", "+this.users[acc].getStatus()+")");
+            System.out.print(this.users[acc].getName()+"("+this.users[acc].getEmail()+", "+this.users[acc].getPayment()+", "+this.users[acc].getStatus()+", "+this.users[acc].getAllocStatus()+")");
             acc++;
             if (this.users[acc].getName().equals("-1")!=true){System.out.print("; ");}
         }
@@ -84,8 +84,8 @@ public class Projetos{
     }
     public boolean userExist(User user_name){
         int acc = 0;
-        while (this.users[acc].getName().equals("-1")!=true){
-            if (this.users[acc].getName().equals(user_name.getName())){return true;}
+        while ((this.users[acc].getName()).equals("-1")!=true){
+            if ((this.users[acc].getName()).equals(user_name.getName())==true){return true;}
             acc++;
         }
         return false;
@@ -104,6 +104,19 @@ public class Projetos{
         acc++;
         String final_name = "-1";
         this.users[acc] = new User(final_name);
+    }
+    public void addUser(User user, AllocatorStatus as){
+        int acc = 0;
+        while((this.users[acc].getName()).equals("-1")==false){
+            // System.out.println("userINUserExist:"+this.users[acc].getName());
+            acc+=1;
+        }
+        // acc+=1;
+        this.users[acc] = user;
+        this.users[acc].setAllocStatus(as);
+        acc++;
+        String final_name = "-1";
+        this.users[acc] = new User(final_name);//, "not_defined", "not_defined", null, 0.0, as);
     }
     static public void main(String[] args){
         return;

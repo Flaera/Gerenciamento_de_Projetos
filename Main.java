@@ -34,7 +34,7 @@ public class Main {
                 if (like_status.equals("S")==true){
                     System.out.println("Digite Aluna(o), Professora(or) ou Pesquisadora(or):");
                     UserStatus status = UserStatus.valueOf(opt.nextLine().toUpperCase());
-                    User new_user = new User(name, email, password, status, 0.0);
+                    User new_user = new User(name, email, password, status, 0.0, AllocatorStatus.DEFINITIVE);
                     users[acc_users] = new_user;
                 }
                 else{
