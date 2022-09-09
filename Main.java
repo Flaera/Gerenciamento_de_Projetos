@@ -7,6 +7,7 @@ public class Main {
         System.out.println("\n--GERENCIADOR DE PROJETOS--");
         System.out.println("1 para criar um usuária(o).");
         System.out.println("2 para logar um usuária(o).");
+        System.out.println("3 se esqueceu a senha de alguma ou algum usuária(o).");
         System.out.println("0 para sair do programa.");
     }
     public static void main(String[] args){
@@ -70,7 +71,32 @@ public class Main {
                         break;
                     }
                 }
-                else{System.out.println("Não existe usuária(o) cadastradas(o). Login e senha podem esta incórretas.");}
+                else{System.out.println("Não existe usuária(o) cadastradas(o). Login, senha ou e-mail podem estarem incórretas.");}
+            }
+            else if (option==3){
+                int user_id3 = -1;
+                System.out.println("Digite o nome de usuária(o):");
+                String check_name = opt.nextLine();
+                for (int i=0; i<acc_users; i++){
+                    if (users[i].getName().equals(check_name)==true){user_id3 = i;break;}
+                }
+                if (user_id3!=-1){
+                    System.out.println("Digite o e-mail da(o) usuária(o):");
+                    String check_email = opt.nextLine();
+                    if (check_email.equals(users[user_id3].getEmail())==true){
+                        System.out.println("Digite a nova senha da(o) usuária(o):");
+                        String pw = opt.nextLine();
+                        System.out.println("Digite novamente a senha para confirmar:");
+                        String pw2 = opt.nextLine();
+                        if (pw.equals(pw2)==true){
+                            users[user_id3].setPassword(pw2);
+                            System.out.println("Senha nova registrada.");
+                        }
+                        else{System.out.println("Erro. Inconsistência nos dados.");}
+                    }
+                    else{System.out.println("Erro. Inconsistência nos dados.");}
+                }
+                else{System.out.println("Erro. Inconsistência nos dados.");}
             }
             else if (option==0){opt.close();return;}
         }
