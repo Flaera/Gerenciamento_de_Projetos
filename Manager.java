@@ -27,7 +27,8 @@ public class Manager{
         System.out.println("Digite 10 para consultar por usuária(o).");
         System.out.println("Digite 11 para consultar por ID de projeto.");
         System.out.println("Digite 12 para consultar por atividade.");
-        System.out.println("Digite 13 para intercambiar um usuário para um projeto.");
+        System.out.println("Digite 13 para intercambiar uma(um) usuária(o) para um projeto.");
+        System.out.println("Digite 14 para atribuir um valor de bolsa a uma(um) usuária(o).");
         System.out.println("Digite 0 para sair do programa.");
     }
     public static int taskExist(String task){
@@ -327,6 +328,25 @@ public class Manager{
                 if (error==true){
                     System.out.println("Erro. Projeto não existe ou usuário não existe.");
                 }
+            }
+            else if (option==14){
+                System.out.println("Escolhida a opção 14.");
+
+                System.out.println("Digite um nome de usuária(o):");
+                String user_name14 = opt.nextLine();
+                System.out.println("Digite o valor da bolsa para esta(o) usuária(o):");
+                double new_value14 = Double.parseDouble(opt.nextLine());
+                boolean update14 = false;
+                for (int i=0; i<acc_projects; i++){
+                    User user_name14_2 = projects[i].getUserPointer(user_name14);
+                    if (user_name14_2!=null){
+                        user_name14_2.setPayment(new_value14);
+                        update14 = true;
+                    }
+                }
+                if (update14==true){
+                    System.out.println("Valor alterado com sucesso.");
+                }else{System.out.println("Erro. Usuário não existe.");}
             }
             else if (option==0){opt.close();return;}
         }

@@ -10,6 +10,7 @@ public class Main {
         System.out.println("3 se esqueceu a senha de alguma ou algum usuária(o).");
         System.out.println("0 para sair do programa.");
     }
+    public static void errorDataInconsistent(){System.out.println("Erro. Inconsistência nos dados.");}
     public static void main(String[] args){
         User[] users = new User[Manager.LEN_MAX_USERS];
         int acc_users = 0;
@@ -92,11 +93,11 @@ public class Main {
                             users[user_id3].setPassword(pw2);
                             System.out.println("Senha nova registrada.");
                         }
-                        else{System.out.println("Erro. Inconsistência nos dados.");}
+                        else{errorDataInconsistent();}
                     }
-                    else{System.out.println("Erro. Inconsistência nos dados.");}
+                    else{errorDataInconsistent();}
                 }
-                else{System.out.println("Erro. Inconsistência nos dados.");}
+                else{errorDataInconsistent();}
             }
             else if (option==0){opt.close();return;}
         }
