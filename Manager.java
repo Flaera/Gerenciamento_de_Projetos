@@ -29,6 +29,8 @@ public class Manager{
         System.out.println("Digite 12 para consultar por atividade.");
         System.out.println("Digite 13 para intercambiar uma(um) usuária(o) para um projeto.");
         System.out.println("Digite 14 para atribuir um valor de bolsa a uma(um) usuária(o).");
+        System.out.println("Digite 15 para undo.");
+        System.out.println("Digite 16 para redo.");
         System.out.println("Digite 0 para sair do programa.");
     }
     public static int taskExist(String task){
@@ -79,7 +81,7 @@ public class Manager{
         scan1[max] = new User("-1");
         return scan1;
     }
-    public void Runner(){
+    public int Runner(){
         projects = new Projetos[LEN_MAX_USERS];
         opt = new Scanner(System.in);
         while (true){
@@ -129,8 +131,10 @@ public class Manager{
                 System.out.println("\n--RELATÓRIO DE PROJETOS NA INSTITUIÇÃO--");
                 System.out.print("\n");
                 for (int i=0; i<acc_projects; ++i){
-                    if ((projects[i].getID()!=-1)==true){
-                        projects[i].printAllInfos();
+                    if (projects[i]!=null){
+                        if (projects[i].getID()!=-1){
+                            projects[i].printAllInfos();
+                        }
                     }
                 }
                 System.out.print("\n");
@@ -348,8 +352,12 @@ public class Manager{
                     System.out.println("Valor alterado com sucesso.");
                 }else{System.out.println("Erro. Usuário não existe.");}
             }
-            else if (option==0){opt.close();return;}
+            else if (option==15){return -1;}
+            else if (option==16){return 1;}
+            else if (option==0){opt.close();break;}
+            // return 0;
         }
+        return 0;
     }
     // public static void main(String[] args){return;}
 }

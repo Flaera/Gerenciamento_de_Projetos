@@ -14,12 +14,13 @@ public class Main {
     public static void main(String[] args){
         User[] users = new User[Manager.LEN_MAX_USERS];
         int acc_users = 0;
-    
-        Manager manager = null;
+
+        Manager[] manager = new Manager[Manager.LEN_MAX_USERS];
+        manager[0] = null;
         Scanner opt = new Scanner(System.in);
 
         int option = -1;
-        while(option!=0 && manager==null){
+        while(option!=0){ //&& manager==null){
             Menu();
             option = Integer.parseInt(opt.nextLine());
             // option = opt.nextInt();
@@ -67,8 +68,33 @@ public class Main {
                         // opt.nextLine();
                         // opt.close();
                         // while (true){manager = new Manager(users[index]);}
-                        manager = new Manager(users[index]);
-                        manager.Runner();
+                        int acc_main=0;
+                        manager[acc_main] = new Manager(users[index]);
+                        // System.out.println("do_task:"+do_task+", "+"acc_main:"+acc_main);
+                        int do_task;
+                        do_task = manager[acc_main].Runner();
+                        do{
+                            if (do_task==-1){
+                                //retroceda
+                                if (acc_main>0){
+                                    Manager aux = manager[acc_main];
+                                    acc_main--;
+                                    manager[acc_main] = aux;
+                                }
+                                System.out.println("do_task1:"+do_task+"acc_main:"+acc_main);
+                            }
+                            else if (do_task!=-1){
+                            // else if (do_task==1 && acc_main<Manager.LEN_MAX_USERS){
+                                //forward, avance
+                                Manager aux = manager[acc_main];
+                                acc_main++;
+                                manager[acc_main] = aux;
+                                System.out.println("do_task2:"+do_task+"acc_main:"+acc_main);
+                            }
+                            // else if (do_task==0){continue;}
+                            do_task = manager[acc_main].Runner();
+                            // else{manager[acc_main]=manager[acc_main];}
+                        }while(do_task!=0);
                         break;
                     }
                 }
