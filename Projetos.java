@@ -1,9 +1,9 @@
 public class Projetos{
-    public String task;
-    public User[] users;
-    public String prof_or_research;
-    public int id;
-    public int state;
+    private String task;
+    private User[] users;
+    private String prof_or_research;
+    private int id;
+    private int state;
     Projetos(int _id, String _task, User[] _users, String _prof_or_research){
         this.task = _task;
         this.users = _users;

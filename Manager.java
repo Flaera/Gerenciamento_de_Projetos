@@ -82,10 +82,11 @@ public class Manager{
         return scan1;
     }
     public int Runner(){
+        // int end = 0;
         projects = new Projetos[LEN_MAX_USERS];
         opt = new Scanner(System.in);
-        while (true){
-            subMenu1();
+        subMenu1();
+        while (opt.hasNextLine()){
             // System.out.println("Pressione enter:");
             // opt.nextLine();
             int option = Integer.parseInt(opt.nextLine());
@@ -240,7 +241,7 @@ public class Manager{
                 int id9 = Integer.parseInt(opt.nextLine());
                 String coord = projects[id9].getCoord();
                 boolean permission = projects[id9].getUserPointer(coord).getStatus()==UserStatus.PROFESSORA || projects[id9].getUserPointer(coord).getStatus()==UserStatus.PROFESSOR || projects[id9].getUserPointer(coord).getStatus()==UserStatus.PESQUISADORA || projects[id9].getUserPointer(coord).getStatus()==UserStatus.PESQUISADOR;
-                if (projectExist(id9)==true && projects[id9].getStatus()<3 && getLogin().getName().equals(projects[id9].prof_or_research) && (permission==true)){
+                if (projectExist(id9)==true && projects[id9].getStatus()<3 && getLogin().getName().equals(projects[id9].getCoord()) && (permission==true)){
                     System.out.print("Coord. "+projects[id9].getCoord()+", confirma a alteração de status de \""+projects[id9].getStringState()+"\"");
                     projects[id9].setStatus(projects[id9].getStatus()+1);
                     System.out.println(" para \""+projects[id9].getStringState()+"\"?");
@@ -354,10 +355,13 @@ public class Manager{
             }
             else if (option==15){return -1;}
             else if (option==16){return 1;}
-            else if (option==0){opt.close();break;}
+            else if (option==0){opt.close();return 0;}
+            opt.close();
+            break; //Break the loop and send answer to do_while loop in Main
             // return 0;
         }
-        return 0;
+        // System.out.println("Finishing instance...");
+        return 1;
     }
     // public static void main(String[] args){return;}
 }
