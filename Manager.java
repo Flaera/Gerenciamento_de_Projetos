@@ -1,18 +1,20 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
-public class Manager{
+public class Manager extends Projetos{
     public static int LEN_MAX_USERS = 1000;
     public static int acc_projects=0;
-    public static Projetos[] projects;
+    public static ArrayList<Projetos> projects;
     public static Scanner opt;
     public static User user_data;
     public Manager(User _user_data){
+        super();
         user_data = _user_data;
     }
 
     public static User getLogin(){return user_data;}
 
-    public static void subMenu1(){
+    public void subMenu1(){
         System.out.println("\n--GERENCIADOR DE PROJETOS--");
         System.out.println("Logada(o) como: "+getLogin().getName()+".");
         System.out.println("Digite 1 para criar um projeto.");
@@ -36,20 +38,20 @@ public class Manager{
     public static int taskExist(String task){
         int idt = -1;
         for (int i=0; i<acc_projects; i++){
-            if (projects[i].getID()!=-1 && projects[i].getTask().equals(task)==true){idt=i;break;}
+            if (projects.get(i).getID()!=-1 && projects.get(i).getTask().equals(task)==true){idt=i;break;}
         }
         return idt;
     }
     public static boolean projectExist(int id_proj){
-        if (id_proj<acc_projects && projects[id_proj].getID()!=-1){return true;}
+        if (id_proj<acc_projects && projects.get(id_proj).getID()!=-1){return true;}
         return false;
     }
-    public static int findProject(Projetos[] projects, int choose_id, int n){
+    public static int findProject(ArrayList<Projetos> projects, int choose_id){
         int find = -1;
-        for (int i=0; i<n; i++){
-            if (projects[choose_id].getID()==projects[i].getID()){
+        for (int i=0; i<projects.size(); i++){
+            if (projects.get(choose_id).getID()==projects.get(i).getID()){
                 find = i;
-                return projects[i].getID();
+                return projects.get(i).getID();
             }
         }
         if (find==-1){
@@ -81,14 +83,49 @@ public class Manager{
         scan1[max] = new User("-1");
         return scan1;
     }
-    public int Runner(){
+    @Override
+    public void printAllInfos() {
+        int spaces = 20;
+        // TODO Auto-generated method stub
+        // super.printAllInfos();
+        for (int i=0; i<projects.size(); i++){
+            if (projects.get(i).getID()!=-1){
+                printLineSep(spaces);
+                System.out.print("ID: ");
+                System.out.println(projects.get(i).getID());
+                System.out.print("Tarefa: ");
+                System.out.println(projects.get(i).getTask());
+
+                System.out.print("Users:\n");
+                int acc = 0;
+                User[] users = projects.get(i).getUsers();
+                while(users[acc].getName().equals("-1")!=true)
+                {
+                    System.out.print("   "+users[acc].getName()+"("+users[acc].getEmail()+", "+users[acc].getPayment()+", "+users[acc].getStatus()+", "+users[acc].getAllocStatus()+")");
+                    acc++;
+                    if (users[acc].getName().equals("-1")!=true){System.out.print(".");}
+                    else{System.out.println(";");}
+                }
+                System.out.print("\nCoord.: ");
+                System.out.println(projects.get(i).getCoord());
+
+                System.out.print("Status: ");
+                System.out.println(getStringState()+".");
+                printLineSep(spaces);
+            }
+        }
+    }
+    public int Runner(int input_option){
         // int end = 0;
-        projects = new Projetos[LEN_MAX_USERS];
+        projects = new ArrayList<Projetos>();
         opt = new Scanner(System.in);
-        subMenu1();
-        while (opt.hasNextLine()){
+        // subMenu1();
+        // String input = "";
+        // System.out.println("input:"+input);
+        while (true){
+            subMenu1();
+            // input = opt.nextLine();
             // System.out.println("Pressione enter:");
-            // opt.nextLine();
             int option = Integer.parseInt(opt.nextLine());
             // opt.nextLine();
             if (option==1){
@@ -96,7 +133,8 @@ public class Manager{
                 System.out.println("Escolhida a opção 1.");
                 
                 System.out.println("Digite a tarefa:");
-                String scan0 = opt.nextLine();
+                String scan0;
+                scan0=opt.nextLine();
                 // opt.nextLine();
                 User[] scan1;
                 System.out.println("Digite o número de usuárias(os): ");
@@ -108,21 +146,22 @@ public class Manager{
                 String scan2 = opt.nextLine();
                 // opt.nextLine();
 
-                projects[acc_projects] = new Projetos(acc_projects, scan0, scan1, scan2);
+                projects.add(new Projetos(acc_projects, scan0, scan1, scan2));
+                // acc_projects++;
 
-                projects[acc_projects].printAllInfos();
+                projects.get(acc_projects-1).printAllInfos();
                 acc_projects += 1;
             }
             else if (option==2){
                 System.out.println("Escolhida a opção 2.");
                 System.out.println("Digite o ID do projeto que deseja remover:");
                 int choose_id = Integer.parseInt(opt.nextLine());
-                int search = findProject(projects, choose_id, acc_projects);
+                int search = findProject(projects, choose_id);
                 if (search!=-1){
-                    projects[search].setID(-1);
-                    projects[search].setTask("");
-                    projects[search].setUsers(null);
-                    projects[search].setCoord("");
+                    projects.get(search).setID(-1);
+                    projects.get(search).setTask("");
+                    projects.get(search).setUsers(null);
+                    projects.get(search).setCoord("");
                     System.out.println("Remoção concluída.");
                 }
                 if (search==-1){System.out.println("ID não encontrado.");}
@@ -132,9 +171,10 @@ public class Manager{
                 System.out.println("\n--RELATÓRIO DE PROJETOS NA INSTITUIÇÃO--");
                 System.out.print("\n");
                 for (int i=0; i<acc_projects; ++i){
-                    if (projects[i]!=null){
-                        if (projects[i].getID()!=-1){
-                            projects[i].printAllInfos();
+                    if (projects.get(i)!=null){
+                        if (projects.get(i).getID()!=-1){
+                            // projects.get(i).printAllInfos();
+                            printAllInfos();
                         }
                     }
                 }
@@ -144,7 +184,7 @@ public class Manager{
                 System.out.println("Escolhida a opção 4");
                 System.out.print("Digite o ID do projeto que deseja editar: ");
                 int id_choosed = opt.nextInt();
-                int id_finded = findProject(projects, id_choosed, acc_projects);
+                int id_finded = findProject(projects, id_choosed);
                 if (id_finded!=-1){
                     //Editar
                     System.out.println("Digite a nova tarefa do Projeto:");
@@ -162,7 +202,7 @@ public class Manager{
                     System.out.println("Digite a(o) nova(o) coordenadora(or) deste projeto:");
                     String up_coord = opt.nextLine();
 
-                    projects[id_finded].updateProject(up_task, up_users, up_coord);
+                    projects.get(id_finded).updateProject(up_task, up_users, up_coord);
                 }
             }
             else if (option==5){
@@ -176,12 +216,12 @@ public class Manager{
                 int id5 = Integer.parseInt(opt.nextLine());
                 // id5 = opt.nextInt();
                 boolean search = false;
-                search = projects[id5].userExist(user5);
+                search = projects.get(id5).userExist(user5);
                 if (search==true){
                     System.out.println("Erro. Usuária(o) já esta no projeto ou ID do projeto não existe.");
                 }
                 else{
-                    projects[id5].addUser(user5);
+                    projects.get(id5).addUser(user5);
                     System.out.println("Usuária(o) "+user5.getName()+" foi associado.");
                 }
             }
@@ -196,8 +236,8 @@ public class Manager{
                 if (search==true){
                     System.out.println("Digite a(o) usuária(o) a ser associada(o):");
                     User user_name = new User(opt.nextLine());
-                    if (projects[id6].userExist(user_name)==false){
-                        projects[id6].addUser(user_name);
+                    if (projects.get(id6).userExist(user_name)==false){
+                        projects.get(id6).addUser(user_name);
                         System.out.println("Usuária(o) "+user_name.getName()+" foi associado.");
                     }    
                 }
@@ -212,8 +252,8 @@ public class Manager{
                 System.out.println("Digite uma(um) usuária(o) para associar:");
                 User user7 = new User(opt.nextLine());
                 int id7 = taskExist(task);
-                if (id7!=-1 && projects[id7].userExist(user7)!=true){
-                    projects[id7].addUser(user7);
+                if (id7!=-1 && projects.get(id7).userExist(user7)!=true){
+                    projects.get(id7).addUser(user7);
                     System.out.println("Usuária(o) "+user7.getName()+" foi associada(o).");
                 }
                 else{System.out.println("Erro. Atividade não existe ou usuária(o) já esta associada(o).");}
@@ -227,8 +267,8 @@ public class Manager{
                 System.out.println("Digite uma atividade para associar:");
                 String task8 = opt.nextLine();
                 int id8 = taskExist(task8);
-                if (id8!=-1 && projects[id8].userExist(user8)==false){
-                    projects[id8].addUser(user8);
+                if (id8!=-1 && projects.get(id8).userExist(user8)==false){
+                    projects.get(id8).addUser(user8);
                     System.out.println("Usuária(o) "+user8.getName()+" foi associada(o).");
                 }
                 else{System.out.println("Erro. Usuário já associado a atividade ou atividade não existe.");}
@@ -239,17 +279,17 @@ public class Manager{
                 System.out.println("Digite um ID de projeto para alterar o status:");
                 // opt.nextLine();
                 int id9 = Integer.parseInt(opt.nextLine());
-                String coord = projects[id9].getCoord();
-                boolean permission = projects[id9].getUserPointer(coord).getStatus()==UserStatus.PROFESSORA || projects[id9].getUserPointer(coord).getStatus()==UserStatus.PROFESSOR || projects[id9].getUserPointer(coord).getStatus()==UserStatus.PESQUISADORA || projects[id9].getUserPointer(coord).getStatus()==UserStatus.PESQUISADOR;
-                if (projectExist(id9)==true && projects[id9].getStatus()<3 && getLogin().getName().equals(projects[id9].getCoord()) && (permission==true)){
-                    System.out.print("Coord. "+projects[id9].getCoord()+", confirma a alteração de status de \""+projects[id9].getStringState()+"\"");
-                    projects[id9].setStatus(projects[id9].getStatus()+1);
-                    System.out.println(" para \""+projects[id9].getStringState()+"\"?");
+                String coord = projects.get(id9).getCoord();
+                boolean permission = projects.get(id9).getUserPointer(coord).getStatus()==UserStatus.PROFESSORA || projects.get(id9).getUserPointer(coord).getStatus()==UserStatus.PROFESSOR || projects.get(id9).getUserPointer(coord).getStatus()==UserStatus.PESQUISADORA || projects.get(id9).getUserPointer(coord).getStatus()==UserStatus.PESQUISADOR;
+                if (projectExist(id9)==true && projects.get(id9).getStatus()<3 && getLogin().getName().equals(projects.get(id9).getCoord()) && (permission==true)){
+                    System.out.print("Coord. "+projects.get(id9).getCoord()+", confirma a alteração de status de \""+projects.get(id9).getStringState()+"\"");
+                    projects.get(id9).setStatus(projects.get(id9).getStatus()+1);
+                    System.out.println(" para \""+projects.get(id9).getStringState()+"\"?");
                     System.out.println("Digite 1 para confirmar ou outro número para não confirmar:");
                     int confirm = Integer.parseInt(opt.nextLine());
                     if (confirm==1){System.out.println("Alteração concluída");}
-                    else if (projects[id9].getStatus()>0){
-                        projects[id9].setStatus(projects[id9].getStatus()-1);
+                    else if (projects.get(id9).getStatus()>0){
+                        projects.get(id9).setStatus(projects.get(id9).getStatus()-1);
                         System.out.println("Alteração não concluída.");
                     }
                     else{
@@ -266,8 +306,8 @@ public class Manager{
                 User user10 = new User(opt.nextLine());
                 boolean finded = false;
                 for (int i=0; i<acc_projects; i++){
-                    if (projects[i].userExist(user10)==true){
-                        projects[i].printAllInfos();
+                    if (projects.get(i).userExist(user10)==true){
+                        projects.get(i).printAllInfos();
                         finded = true;
                     }
                 }
@@ -280,7 +320,7 @@ public class Manager{
                 // opt.nextLine();
                 int id11 = Integer.parseInt(opt.nextLine());
                 if (projectExist(id11)==true){
-                    projects[id11].printAllInfos();
+                    projects.get(id11).printAllInfos();
                 }
                 else{System.out.println("Erro. Nenhum resultado encontrado.");}
             }
@@ -292,8 +332,8 @@ public class Manager{
                 String task12 = opt.nextLine();
                 boolean finded = false;
                 for (int i=0; i<acc_projects; i++){
-                    if (projects[i].getTask().equals(task12)==true){
-                        projects[i].printAllInfos();
+                    if (projects.get(i).getTask().equals(task12)==true){
+                        projects.get(i).printAllInfos();
                         finded = true;
                     }
                 }
@@ -314,7 +354,7 @@ public class Manager{
                     // System.out.println("userExist:"+projects[id13].userExist(user13Pointer));
                     int id13_1 = -1;
                     for (int i=0; i<acc_projects; i++){
-                        User[] users13_2 = projects[i].getUsers();
+                        User[] users13_2 = projects.get(i).getUsers();
                         int acc13 = 0;
                         while(users13_2[acc13].getName().equals("-1")!=true){
                             if (user13.equals(users13_2[acc13].getName())==true){id13_1=acc13;break;}
@@ -324,8 +364,8 @@ public class Manager{
                     }
                     if (id13_1!=-1){
                         // System.out.println("HERE2");
-                        User user13_searched = projects[id13_1].getUserPointer(user13);
-                        projects[id13].addUser(user13_searched, AllocatorStatus.INTERCAMBISTA);
+                        User user13_searched = projects.get(id13_1).getUserPointer(user13);
+                        projects.get(id13_1).addUser(user13_searched, AllocatorStatus.INTERCAMBISTA);
                         System.out.println("Intercâmbio feito.");
                     }
                     else {error=true;}
@@ -343,7 +383,7 @@ public class Manager{
                 double new_value14 = Double.parseDouble(opt.nextLine());
                 boolean update14 = false;
                 for (int i=0; i<acc_projects; i++){
-                    User user_name14_2 = projects[i].getUserPointer(user_name14);
+                    User user_name14_2 = projects.get(i).getUserPointer(user_name14);
                     if (user_name14_2!=null){
                         user_name14_2.setPayment(new_value14);
                         update14 = true;
@@ -357,11 +397,12 @@ public class Manager{
             else if (option==16){return 1;}
             else if (option==0){opt.close();return 0;}
             opt.close();
-            break; //Break the loop and send answer to do_while loop in Main
+            // break; //Break the loop and send answer to do_while loop in Main
             // return 0;
         }
         // System.out.println("Finishing instance...");
-        return 1;
+        // opt.close();
+        // return 1;
     }
     // public static void main(String[] args){return;}
 }

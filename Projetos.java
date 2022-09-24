@@ -4,6 +4,7 @@ public class Projetos{
     private String prof_or_research;
     private int id;
     private int state;
+    Projetos(){}
     Projetos(int _id, String _task, User[] _users, String _prof_or_research){
         this.task = _task;
         this.users = _users;
@@ -27,21 +28,15 @@ public class Projetos{
         System.out.print("Tarefa: ");
         System.out.println(this.task);
 
-        System.out.print("Users: ");
+        System.out.print("Users:\n");
         int acc = 0;
         while(this.users[acc].getName().equals("-1")!=true)
         {
-            System.out.print(this.users[acc].getName()+"("+this.users[acc].getEmail()+", "+this.users[acc].getPayment()+", "+this.users[acc].getStatus()+", "+this.users[acc].getAllocStatus()+")");
+            System.out.println("   "+this.users[acc].getName());
             acc++;
-            if (this.users[acc].getName().equals("-1")!=true){System.out.print("; ");}
+            if (this.users[acc].getName().equals("-1")!=true){System.out.print(".");}
+            else{System.out.println(";");}
         }
-
-        System.out.print("\nCoord.: ");
-        System.out.println(this.prof_or_research);
-
-        System.out.print("Status: ");
-        System.out.println(getStringState()+".");
-        printLineSep(spaces);
     }
     public void setID(int n){this.id=n;}
     public void setTask(String n){this.task=n;}

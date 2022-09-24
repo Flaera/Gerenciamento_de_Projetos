@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Main {
+public class Main{
     // public Manager manager = null;
     // public Scanner opt = null;
     public static void Menu(){
@@ -71,30 +71,38 @@ public class Main {
                         int acc_main=0;
                         manager[acc_main] = new Manager(users[index]);
                         // System.out.println("do_task:"+do_task+", "+"acc_main:"+acc_main);
-                        int do_task;
+                        // int do_task=1;
                         // do_task = manager[acc_main].Runner();
-                        do{
-                            do_task = manager[acc_main].Runner();
-                            if (do_task==-1){
-                                //retroceda
-                                if (acc_main>0){
-                                    // Manager aux = manager[acc_main];
-                                    acc_main--;
-                                    // manager[acc_main] = aux;
-                                }
-                                System.out.println("do_task1:"+do_task+"acc_main:"+acc_main);
-                            }
-                            else if (do_task==1){
-                            // else if (do_task==1 && acc_main<Manager.LEN_MAX_USERS){
-                                //forward, avance
-                                Manager aux = manager[acc_main];
-                                acc_main++;
-                                manager[acc_main] = aux;
-                                System.out.println("do_task2:"+do_task+"acc_main:"+acc_main);
-                            }
-                            // else if (do_task==0){continue;}
-                            // else{manager[acc_main]=manager[acc_main];}
-                        }while(do_task!=0);
+                        manager[acc_main].Runner(0);
+                        // while(do_task!=0){
+                        //     manager[acc_main].subMenu1();
+                            
+                        //     int input=0;while(opt.hasNextLine()){
+                        //     input = Integer.parseInt(opt.nextLine());break;}
+                            
+                            
+                        //     do_task = manager[acc_main].Runner(input);
+                        //     if (do_task==-1){
+                        //         //retroceda
+                        //         if (acc_main>0){
+                        //             // Manager aux = manager[acc_main];
+                        //             acc_main--;
+                        //             // manager[acc_main] = aux;
+                        //         }
+                        //         System.out.println("do_task1:"+do_task+"acc_main:"+acc_main);
+                        //     }
+                        //     else if (do_task>=1 && do_task<=16){
+                        //     // else if (do_task==1 && acc_main<Manager.LEN_MAX_USERS){
+                        //         //forward, avance
+                        //         Manager aux = manager[acc_main];
+                        //         acc_main++;
+                        //         manager[acc_main] = aux;
+                        //         System.out.println("do_task2:"+do_task+"acc_main:"+acc_main);
+                        //     }
+                            
+                        //     // else if (do_task==0){continue;}
+                        //     // else{manager[acc_main]=manager[acc_main];}
+                        // }//while(do_task!=0);
                         System.out.println("Finishing program...");
                         break;
                     }
