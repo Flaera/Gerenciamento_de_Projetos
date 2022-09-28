@@ -1,15 +1,15 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 
-public class Manager extends Projetos{
-    public static int LEN_MAX_USERS = 1000;
+public class Manager extends Projetos implements MainManager{
     public static int acc_projects=0;
-    public static ArrayList<Projetos> projects;
-    public static Scanner opt;
+    private static ArrayList<Projetos> projects;
+    private static Scanner opt;
     public static User user_data;
     public Manager(User _user_data){
         super();
         user_data = _user_data;
+        // for (int i=0; i<LEN_MAX_USERS; i++){projects.get(i).setID(-1);}
     }
 
     public static User getLogin(){return user_data;}
@@ -46,13 +46,18 @@ public class Manager extends Projetos{
         if (id_proj<acc_projects && projects.get(id_proj).getID()!=-1){return true;}
         return false;
     }
-    public static int findProject(ArrayList<Projetos> projects, int choose_id){
+    public int findProject(ArrayList<Projetos> projects, int choose_id){
         int find = -1;
         for (int i=0; i<projects.size(); i++){
-            if (projects.get(choose_id).getID()==projects.get(i).getID()){
+            int x = projects.get(choose_id).getID();
+            boolean choosed = x==-1;
+            // System.out.println("proj.get.getID: "+projects.get(choose_id).getID());
+            
+            if (choosed==false && projects.get(choose_id).getID()==projects.get(i).getID()){
                 find = i;
                 return projects.get(i).getID();
             }
+            
         }
         if (find==-1){
             System.out.println("Não encontrado ID do projeto. Tente novamente.");
@@ -60,8 +65,8 @@ public class Manager extends Projetos{
         }
         return find;
     }
-    public User[] editUsers(int max){
-        User[] scan1 = new User[LEN_MAX_USERS];
+    public ArrayList<User> editUsers(int max){
+        ArrayList<User> scan1 = new ArrayList<User>();
         int acc = 0;
         for(acc=0; acc<max; acc++){
             System.out.print("Digite a(o) "+(acc+1)+"ª usuária(o): ");
@@ -75,12 +80,12 @@ public class Manager extends Projetos{
             System.out.print("Digite se a(o) "+(acc+1)+"ª usuária(o) é aluna(o), professora(or) ou pesquisadora(or): ");
             UserStatus type = UserStatus.valueOf(opt.nextLine().toUpperCase());
 
-            scan1[acc] = new User(name1, email1, "123", type, 0.0, AllocatorStatus.DEFINITIVE);
+            scan1.add(new User(name1, email1, "123", type, 0.0, AllocatorStatus.DEFINITIVE));
             // acc+=1;
             // opt.nextLine();
             // System.out.println(scan1[acc]);
         };
-        scan1[max] = new User("-1");
+        scan1.add(new User("-1"));
         return scan1;
     }
     @Override
@@ -96,14 +101,14 @@ public class Manager extends Projetos{
                 System.out.print("Tarefa: ");
                 System.out.println(projects.get(i).getTask());
 
-                System.out.print("Users:\n");
+                System.out.print("\nUsers:\n");
                 int acc = 0;
-                User[] users = projects.get(i).getUsers();
-                while(users[acc].getName().equals("-1")!=true)
+                ArrayList<User> users = projects.get(i).getUsers();
+                while(users.get(acc).getName().equals("-1")!=true)
                 {
-                    System.out.print("   "+users[acc].getName()+"("+users[acc].getEmail()+", "+users[acc].getPayment()+", "+users[acc].getStatus()+", "+users[acc].getAllocStatus()+")");
+                    System.out.print("   "+users.get(acc).getName()+"("+users.get(acc).getEmail()+", "+users.get(acc).getPayment()+", "+users.get(acc).getStatus()+", "+users.get(acc).getAllocStatus()+")");
                     acc++;
-                    if (users[acc].getName().equals("-1")!=true){System.out.print(".");}
+                    if (users.get(acc).getName().equals("-1")!=true){System.out.println(",");}
                     else{System.out.println(";");}
                 }
                 System.out.print("\nCoord.: ");
@@ -136,7 +141,7 @@ public class Manager extends Projetos{
                 String scan0;
                 scan0=opt.nextLine();
                 // opt.nextLine();
-                User[] scan1;
+                ArrayList<User> scan1;
                 System.out.println("Digite o número de usuárias(os): ");
                 int max = Integer.parseInt(opt.nextLine());
                 // opt.nextLine();
@@ -149,22 +154,25 @@ public class Manager extends Projetos{
                 projects.add(new Projetos(acc_projects, scan0, scan1, scan2));
                 // acc_projects++;
 
-                projects.get(acc_projects-1).printAllInfos();
+                projects.get(acc_projects).printAllInfos();
                 acc_projects += 1;
             }
             else if (option==2){
                 System.out.println("Escolhida a opção 2.");
                 System.out.println("Digite o ID do projeto que deseja remover:");
                 int choose_id = Integer.parseInt(opt.nextLine());
-                int search = findProject(projects, choose_id);
-                if (search!=-1){
-                    projects.get(search).setID(-1);
-                    projects.get(search).setTask("");
-                    projects.get(search).setUsers(null);
-                    projects.get(search).setCoord("");
-                    System.out.println("Remoção concluída.");
+                int search;
+                if(choose_id>=0 && choose_id<acc_projects){
+                    search = findProject(projects, choose_id);
+                    if (search!=-1){
+                        projects.get(search).setID(-1);
+                        projects.get(search).setTask("");
+                        projects.get(search).setUsers(null);
+                        projects.get(search).setCoord("");
+                        System.out.println("Remoção concluída.");
+                    }
+                    if (search==-1){System.out.println("ID não encontrado.");}
                 }
-                if (search==-1){System.out.println("ID não encontrado.");}
             }
             else if (option==3){
                 System.out.println("Escolhida a opção 3.");
@@ -196,7 +204,7 @@ public class Manager extends Projetos{
                     int max = Integer.parseInt(opt.nextLine());
                     // opt.nextLine();
                     System.out.println("Digite as(os) novas(os) usuárias(os) deste projeto:");
-                    User[] up_users;
+                    ArrayList<User> up_users;
                     up_users = editUsers(max);
 
                     System.out.println("Digite a(o) nova(o) coordenadora(or) deste projeto:");
@@ -354,10 +362,10 @@ public class Manager extends Projetos{
                     // System.out.println("userExist:"+projects[id13].userExist(user13Pointer));
                     int id13_1 = -1;
                     for (int i=0; i<acc_projects; i++){
-                        User[] users13_2 = projects.get(i).getUsers();
+                        ArrayList<User> users13_2 = projects.get(i).getUsers();
                         int acc13 = 0;
-                        while(users13_2[acc13].getName().equals("-1")!=true){
-                            if (user13.equals(users13_2[acc13].getName())==true){id13_1=acc13;break;}
+                        while(users13_2.get(acc13).getName().equals("-1")!=true){
+                            if (user13.equals(users13_2.get(acc13).getName())==true){id13_1=acc13;break;}
                             acc13++;
                         }
                         if(id13_1!=-1){break;}
@@ -396,7 +404,7 @@ public class Manager extends Projetos{
             else if (option==15){return -1;}
             else if (option==16){return 1;}
             else if (option==0){opt.close();return 0;}
-            opt.close();
+            // opt.close();
             // break; //Break the loop and send answer to do_while loop in Main
             // return 0;
         }

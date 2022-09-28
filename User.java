@@ -1,4 +1,4 @@
-public class User {
+public class User extends People{
     private String name;
     private String email;
     private String password;
