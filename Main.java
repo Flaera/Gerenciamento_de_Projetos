@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.util.List;
+import java.util.Stack;
 
 public class Main{
     // public Manager manager = null;
@@ -12,11 +14,11 @@ public class Main{
     }
     public static void errorDataInconsistent(){System.out.println("Erro. Inconsistência nos dados.");}
     public static void main(String[] args){
-        User[] users = new User[Manager.LEN_MAX_USERS];
+        User[] users = new User[MainManager.LEN_MAX_USERS];
         int acc_users = 0;
 
-        Manager[] manager = new Manager[Manager.LEN_MAX_USERS];
-        manager[0] = null;
+        Stack<Manager> manager = new Stack<Manager>();
+        manager.add(null);
         Scanner opt = new Scanner(System.in);
 
         int option = -1;
@@ -68,12 +70,12 @@ public class Main{
                         // opt.nextLine();
                         // opt.close();
                         // while (true){manager = new Manager(users[index]);}
-                        int acc_main=0;
-                        manager[acc_main] = new Manager(users[index]);
+                        Manager manager_current = null;
+                        manager_current = manager.push(new Manager(users[index]));
                         // System.out.println("do_task:"+do_task+", "+"acc_main:"+acc_main);
                         // int do_task=1;
                         // do_task = manager[acc_main].Runner();
-                        manager[acc_main].Runner(0);
+                        manager_current.Runner(0);
                         // while(do_task!=0){
                         //     manager[acc_main].subMenu1();
                             
