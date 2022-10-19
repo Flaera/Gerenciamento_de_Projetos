@@ -12,7 +12,6 @@ public class Main{
         System.out.println("3 se esqueceu a senha de alguma ou algum usuária(o).");
         System.out.println("0 para sair do programa.");
     }
-    public static void errorDataInconsistent(){System.out.println("Erro. Inconsistência nos dados.");}
     public static void main(String[] args){
         User[] users = new User[MainManager.LEN_MAX_USERS];
         int acc_users = 0;
@@ -49,13 +48,15 @@ public class Main{
                 acc_users++;
             }
             else if (option==2){
-                if (acc_users>0){
+                String login;
+                String pw;
+                boolean finded = false;
+                int index=-1;
+                try{
                     System.out.println("Digite o nome da(o) usuária(o):");
-                    String login = opt.nextLine();
+                    login = opt.nextLine();
                     System.out.println("Digite a senha da(o) usuária(o):");
-                    String pw = opt.nextLine();
-                    boolean finded = false;
-                    int index=-1;
+                    pw = opt.nextLine();
                     for (int i=0; i<acc_users; i++){
                         if (users[i].getName().equals(login)==true && users[i].getPassword().equals(pw)==true){
                             // System.out.println("HERE");
@@ -64,77 +65,80 @@ public class Main{
                             break;
                         }
                     }
-                    if (finded==true)
-                    {
-                        // System.out.println("Pressione enter:");
-                        // opt.nextLine();
-                        // opt.close();
-                        // while (true){manager = new Manager(users[index]);}
-                        Manager manager_current = null;
-                        manager_current = manager.push(new Manager(users[index]));
-                        // System.out.println("do_task:"+do_task+", "+"acc_main:"+acc_main);
-                        // int do_task=1;
-                        // do_task = manager[acc_main].Runner();
-                        manager_current.Runner(0);
-                        // while(do_task!=0){
-                        //     manager[acc_main].subMenu1();
-                            
-                        //     int input=0;while(opt.hasNextLine()){
-                        //     input = Integer.parseInt(opt.nextLine());break;}
-                            
-                            
-                        //     do_task = manager[acc_main].Runner(input);
-                        //     if (do_task==-1){
-                        //         //retroceda
-                        //         if (acc_main>0){
-                        //             // Manager aux = manager[acc_main];
-                        //             acc_main--;
-                        //             // manager[acc_main] = aux;
-                        //         }
-                        //         System.out.println("do_task1:"+do_task+"acc_main:"+acc_main);
-                        //     }
-                        //     else if (do_task>=1 && do_task<=16){
-                        //     // else if (do_task==1 && acc_main<Manager.LEN_MAX_USERS){
-                        //         //forward, avance
-                        //         Manager aux = manager[acc_main];
-                        //         acc_main++;
-                        //         manager[acc_main] = aux;
-                        //         System.out.println("do_task2:"+do_task+"acc_main:"+acc_main);
-                        //     }
-                            
-                        //     // else if (do_task==0){continue;}
-                        //     // else{manager[acc_main]=manager[acc_main];}
-                        // }//while(do_task!=0);
-                        System.out.println("Finishing program...");
-                        break;
-                    }
+                } catch (NullPointerException | ArrayIndexOutOfBoundsException e){
+                    finded = false;
+                    System.out.println("Usuária(o) não encontrada(o) ou dados não conferem.");
                 }
-                else{System.out.println("Não existe usuária(o) cadastradas(o). Login, senha ou e-mail podem estarem incórretas.");}
+                if (finded==true)
+                {
+                    // System.out.println("Pressione enter:");
+                    // opt.nextLine();
+                    // opt.close();
+                    // while (true){manager = new Manager(users[index]);}
+                    Manager manager_current = null;
+                    manager_current = manager.push(new Manager(users[index]));
+                    // System.out.println("do_task:"+do_task+", "+"acc_main:"+acc_main);
+                    // int do_task=1;
+                    // do_task = manager[acc_main].Runner();
+                    manager_current.Runner(0);
+                    // while(do_task!=0){
+                    //     manager[acc_main].subMenu1();
+                        
+                    //     int input=0;while(opt.hasNextLine()){
+                    //     input = Integer.parseInt(opt.nextLine());break;}
+                        
+                        
+                    //     do_task = manager[acc_main].Runner(input);
+                    //     if (do_task==-1){
+                    //         //retroceda
+                    //         if (acc_main>0){
+                    //             // Manager aux = manager[acc_main];
+                    //             acc_main--;
+                    //             // manager[acc_main] = aux;
+                    //         }
+                    //         System.out.println("do_task1:"+do_task+"acc_main:"+acc_main);
+                    //     }
+                    //     else if (do_task>=1 && do_task<=16){
+                    //     // else if (do_task==1 && acc_main<Manager.LEN_MAX_USERS){
+                    //         //forward, avance
+                    //         Manager aux = manager[acc_main];
+                    //         acc_main++;
+                    //         manager[acc_main] = aux;
+                    //         System.out.println("do_task2:"+do_task+"acc_main:"+acc_main);
+                    //     }
+                        
+                    //     // else if (do_task==0){continue;}
+                    //     // else{manager[acc_main]=manager[acc_main];}
+                    // }//while(do_task!=0);
+                    System.out.println("Finishing program...");
+                    break;
+                }
             }
             else if (option==3){
                 int user_id3 = -1;
                 System.out.println("Digite o nome de usuária(o):");
-                String check_name = opt.nextLine();
-                for (int i=0; i<acc_users; i++){
-                    if (users[i].getName().equals(check_name)==true){user_id3 = i;break;}
-                }
-                if (user_id3!=-1){
+                String check_name = "-1";
+                try{
+                    check_name = opt.nextLine();
+                    for (int i=0; i<acc_users; i++){
+                        if (users[i].getName().equals(check_name)==true){user_id3 = i;break;}
+                    }
                     System.out.println("Digite o e-mail da(o) usuária(o):");
                     String check_email = opt.nextLine();
                     if (check_email.equals(users[user_id3].getEmail())==true){
-                        System.out.println("Digite a nova senha da(o) usuária(o):");
-                        String pw = opt.nextLine();
-                        System.out.println("Digite novamente a senha para confirmar:");
-                        String pw2 = opt.nextLine();
-                        if (pw.equals(pw2)==true){
-                            users[user_id3].setPassword(pw2);
-                            System.out.println("Senha nova registrada.");
-                        }
-                        else{errorDataInconsistent();}
+                            System.out.println("Digite a nova senha da(o) usuária(o):");
+                            String pw = opt.nextLine();
+                            System.out.println("Digite novamente a senha para confirmar:");
+                            String pw2 = opt.nextLine();
+                            if (pw.equals(pw2)==true){
+                                users[user_id3].setPassword(pw2);
+                                System.out.println("Senha nova registrada.");
+                            }
                     }
-                    else{errorDataInconsistent();}
                 }
-                else{errorDataInconsistent();}
+                catch (NullPointerException | NumberFormatException | ArrayIndexOutOfBoundsException e){
+                    System.out.println("Senhas não conferem ou ha inconsistencia nos dados.");
+                }
             }
             else if (option==0){opt.close();return;}
         }

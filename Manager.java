@@ -135,32 +135,46 @@ public class Manager extends Projetos implements MainManager{
             // opt.nextLine();
             if (option==1){
                 // opt.nextLine();
-                System.out.println("Escolhida a opção 1.");
                 
-                System.out.println("Digite a tarefa:");
-                String scan0;
-                scan0=opt.nextLine();
-                // opt.nextLine();
-                ArrayList<User> scan1;
-                System.out.println("Digite o número de usuárias(os): ");
-                int max = Integer.parseInt(opt.nextLine());
-                // opt.nextLine();
-                scan1 = editUsers(max);
+                try{
+                    System.out.println("Escolhida a opção 1.");
+                    
+                    System.out.println("Digite a tarefa:");
+                    String scan0;
+                    scan0=opt.nextLine();
+                    
+                    System.out.println("Digite o número de usuárias(os): ");
+                    int max = Integer.parseInt(opt.nextLine());
+                    ArrayList<User> scan1;
+                    scan1 = editUsers(max);
 
-                System.out.println("Digite a(o) coordenadora(or):");
-                String scan2 = opt.nextLine();
-                // opt.nextLine();
+                    System.out.println("Digite a(o) coordenadora(or):");
+                    String scan2;    
+                    scan2 = opt.nextLine();
 
-                projects.add(new Projetos(acc_projects, scan0, scan1, scan2));
-                // acc_projects++;
+                    projects.add(new Projetos(acc_projects, scan0, scan1, scan2));
+                    // acc_projects++;
 
-                projects.get(acc_projects).printAllInfos();
-                acc_projects += 1;
+                    projects.get(acc_projects).printAllInfos();
+                    acc_projects += 1;
+                    // opt.nextLine();
+                } catch (NullPointerException e) {
+                    System.out.println("Erro em alguma entrada: "+e+" Tente novamente.");
+                } catch (NumberFormatException e){
+                    System.out.println("Erro em alguma entrada: "+e+" Tente novamente.");
+                } catch (IllegalArgumentException e){
+                    System.out.println("Erro em alguma entrada: "+e+" Tente novamente.");
+                }
             }
             else if (option==2){
                 System.out.println("Escolhida a opção 2.");
                 System.out.println("Digite o ID do projeto que deseja remover:");
-                int choose_id = Integer.parseInt(opt.nextLine());
+                int choose_id = -1;
+                try{
+                    choose_id = Integer.parseInt(opt.nextLine());
+                } catch (NumberFormatException e){
+                    System.out.println("Inválida entrada. Erro: "+e+" Tente novamente.");
+                }
                 int search;
                 if(choose_id>=0 && choose_id<acc_projects){
                     search = findProject(projects, choose_id);
@@ -384,22 +398,22 @@ public class Manager extends Projetos implements MainManager{
             }
             else if (option==14){
                 System.out.println("Escolhida a opção 14.");
+                String user_name14 = "-1";
+                double new_value14 = 0.0f;
+                try{
+                    System.out.println("Digite um nome de usuária(o):");
+                    user_name14 = opt.nextLine();
+                    System.out.println("Digite o valor da bolsa para esta(o) usuária(o):");    
+                    new_value14 = Double.parseDouble(opt.nextLine());
 
-                System.out.println("Digite um nome de usuária(o):");
-                String user_name14 = opt.nextLine();
-                System.out.println("Digite o valor da bolsa para esta(o) usuária(o):");
-                double new_value14 = Double.parseDouble(opt.nextLine());
-                boolean update14 = false;
-                for (int i=0; i<acc_projects; i++){
-                    User user_name14_2 = projects.get(i).getUserPointer(user_name14);
-                    if (user_name14_2!=null){
+                    for (int i=0; i<acc_projects; i++){
+                        User user_name14_2 = projects.get(i).getUserPointer(user_name14);
                         user_name14_2.setPayment(new_value14);
-                        update14 = true;
+                        System.out.println("Atribuição de bolsa feita com sucesso.");
                     }
+                }catch (NumberFormatException | NullPointerException e){
+                    System.out.println("Entrada de decimal inválida ou usuária(o) não existe. Erro: "+e+"Tente novamente.");    
                 }
-                if (update14==true){
-                    System.out.println("Valor alterado com sucesso.");
-                }else{System.out.println("Erro. Usuário não existe.");}
             }
             else if (option==15){return -1;}
             else if (option==16){return 1;}
