@@ -31,8 +31,8 @@ public class Manager extends Projetos implements MainManager{
         System.out.println("Digite 12 para consultar por atividade.");
         System.out.println("Digite 13 para intercambiar uma(um) usuária(o) para um projeto.");
         System.out.println("Digite 14 para atribuir um valor de bolsa a uma(um) usuária(o).");
-        System.out.println("Digite 15 para undo.");
-        System.out.println("Digite 16 para redo.");
+        System.out.println("Digite 15 para adicionar uma descrição a um projeto.");
+        System.out.println("Digite 16 para definir data de inicio e término de um projeto.");
         System.out.println("Digite 0 para sair do programa.");
     }
     public static int taskExist(String task){
@@ -116,6 +116,15 @@ public class Manager extends Projetos implements MainManager{
 
                 System.out.print("Status: ");
                 System.out.println(getStringState()+".");
+
+                System.out.print("Descrição: ");
+                System.out.println(projects.get(i).getDescription());
+
+                System.out.print("Data de inicio: ");
+                System.out.println(projects.get(i).getData().getDataCreationString());
+                System.out.print("Data de término: ");
+                System.out.println(projects.get(i).getData().getDataTerminateString());
+
                 printLineSep(spaces);
             }
         }
@@ -131,7 +140,13 @@ public class Manager extends Projetos implements MainManager{
             subMenu1();
             // input = opt.nextLine();
             // System.out.println("Pressione enter:");
-            int option = Integer.parseInt(opt.nextLine());
+            int option;
+            try{option = Integer.parseInt(opt.nextLine());}
+            catch (NumberFormatException e){
+                System.out.println("Opção inválida. Erro"+e+" Tente novamente.");
+                break;
+            }
+            // finally{option=-1;}
             // opt.nextLine();
             if (option==1){
                 // opt.nextLine();
@@ -205,26 +220,30 @@ public class Manager extends Projetos implements MainManager{
             else if (option==4){
                 System.out.println("Escolhida a opção 4");
                 System.out.print("Digite o ID do projeto que deseja editar: ");
-                int id_choosed = opt.nextInt();
-                int id_finded = findProject(projects, id_choosed);
-                if (id_finded!=-1){
-                    //Editar
-                    System.out.println("Digite a nova tarefa do Projeto:");
-                    String up_task;
-                    opt.nextLine();
-                    up_task = opt.nextLine();
+                try{
+                    int id_choosed = Integer.parseInt(opt.nextLine());
+                    int id_finded = findProject(projects, id_choosed);
+                    if (id_finded!=-1){
+                        //Editar
+                        System.out.println("Digite a nova tarefa do Projeto:");
+                        String up_task;
+                        // opt.nextLine();
+                        up_task = opt.nextLine();
 
-                    System.out.println("Digite o novo número de usuárias(os) deste projeto:");
-                    int max = Integer.parseInt(opt.nextLine());
-                    // opt.nextLine();
-                    System.out.println("Digite as(os) novas(os) usuárias(os) deste projeto:");
-                    ArrayList<User> up_users;
-                    up_users = editUsers(max);
+                        System.out.println("Digite o novo número de usuárias(os) deste projeto:");
+                        int max = Integer.parseInt(opt.nextLine());
+                        // opt.nextLine();
+                        System.out.println("Digite as(os) novas(os) usuárias(os) deste projeto:");
+                        ArrayList<User> up_users;
+                        up_users = editUsers(max);
 
-                    System.out.println("Digite a(o) nova(o) coordenadora(or) deste projeto:");
-                    String up_coord = opt.nextLine();
+                        System.out.println("Digite a(o) nova(o) coordenadora(or) deste projeto:");
+                        String up_coord = opt.nextLine();
 
-                    projects.get(id_finded).updateProject(up_task, up_users, up_coord);
+                        projects.get(id_finded).updateProject(up_task, up_users, up_coord);
+                    }
+                } catch (IndexOutOfBoundsException | NumberFormatException | NullPointerException e){
+                    System.out.println("Algum erro com entradas dos números ou dos textos. Erro: "+e+" Tente novamente.");
                 }
             }
             else if (option==5){
@@ -415,16 +434,85 @@ public class Manager extends Projetos implements MainManager{
                     System.out.println("Entrada de decimal inválida ou usuária(o) não existe. Erro: "+e+"Tente novamente.");    
                 }
             }
-            else if (option==15){return -1;}
-            else if (option==16){return 1;}
+            else if (option==15){
+                System.out.println("Escolhida a opção 15.");
+                System.out.println("Digite o ID do projeto que deseja editar a descrição:");
+                int choose_id = -1;
+                try{
+                    choose_id = Integer.parseInt(opt.nextLine());
+                } catch (NumberFormatException e){
+                    System.out.println("Inválida entrada. Erro: "+e+" Tente novamente.");
+                }
+                int search;
+                if(choose_id>=0 && choose_id<acc_projects){
+                    search = findProject(projects, choose_id);
+                    if (search!=-1){
+                        System.out.println("Digite a nova descrição até apertar ENTER.");
+                        projects.get(search).setDescription(opt.nextLine());
+                        System.out.println("Alteração concluída.");
+                    }
+                    if (search==-1){System.out.println("ID não encontrado.");}
+                }
+            }
+            else if (option==16){
+                System.out.println("Escolhida a opção 16.");
+                try{
+                    int id16 = -1;
+                    int search;
+                    System.out.println("Escolha o ID do projeto:");
+                    id16 = Integer.parseInt(opt.nextLine());
+                    if(id16>=0 && id16<acc_projects){
+                        search = findProject(projects, id16);
+                        if (search!=-1){
+
+                            System.out.println("Digite a data de início do projeto:");
+                            System.out.println("Digite o dia:");
+                            int day_init = Integer.parseInt(opt.nextLine());
+                            System.out.println("Digite o mês:");
+                            int montly_init = Integer.parseInt(opt.nextLine());
+                            System.out.println("Digite o ano:");
+                            int year_init = Integer.parseInt(opt.nextLine());
+                            System.out.println("Digite a hora:");
+                            int hour_init = Integer.parseInt(opt.nextLine());
+                            System.out.println("Digite o minuto:");
+                            int min_init = Integer.parseInt(opt.nextLine());
+                            System.out.println("Digite o segundo:");
+                            int sec_init = Integer.parseInt(opt.nextLine());
+                            projects.get(search).getData().setDataCreationString(day_init, montly_init, year_init,
+                             hour_init, min_init, sec_init);
+
+                            System.out.println("Digite a data de término do projeto:");
+                            System.out.println("Digite o dia:");
+                            int day_term = Integer.parseInt(opt.nextLine());
+                            System.out.println("Digite o mês:");
+                            int montly_term = Integer.parseInt(opt.nextLine());
+                            System.out.println("Digite o ano:");
+                            int year_term = Integer.parseInt(opt.nextLine());
+                            System.out.println("Digite a hora:");
+                            int hour_term = Integer.parseInt(opt.nextLine());
+                            System.out.println("Digite o minuto:");
+                            int min_term = Integer.parseInt(opt.nextLine());
+                            System.out.println("Digite o segundo:");
+                            int sec_term = Integer.parseInt(opt.nextLine());
+                            projects.get(search).getData().setDataTerminateString(day_term, montly_term, year_term,
+                            hour_term, min_term, sec_term);
+                        }
+                    }
+                }
+                catch (NumberFormatException | NullPointerException e){
+                    System.out.println("ID não encontrado. Erro: "+e);
+                }
+            }
+            // else if (option==15){return -1;}
+            // else if (option==16){return 1;}
             else if (option==0){opt.close();return 0;}
             // opt.close();
             // break; //Break the loop and send answer to do_while loop in Main
             // return 0;
         }
         // System.out.println("Finishing instance...");
-        // opt.close();
-        // return 1;
+        opt.close();
+        return 1;
     }
     // public static void main(String[] args){return;}
 }

@@ -1,18 +1,23 @@
 import java.util.ArrayList;
 
-public class Projetos{
+public class Projetos {
     private String task;
     private ArrayList<User> users;
     protected String prof_or_research;
     private int id;
     private int state;
-    Projetos(){}
+    private String description;
+    private Time data_time;
+    Projetos(){
+    }
     Projetos(int _id, String _task, ArrayList<User> _users, String _prof_or_research){
         this.task = _task;
         this.users = _users;
         this.prof_or_research = _prof_or_research;
         this.id = _id;
         this.state = 0;
+        this.description="";
+        this.data_time = new Time(28,7,1996,11,59,0,28,7,2100,11,59,0);
     }
     Projetos(int _id, String _task, ArrayList<User> _users, String _prof_or_research, int _state){
         this.task = _task;
@@ -20,6 +25,8 @@ public class Projetos{
         this.prof_or_research = _prof_or_research;
         this.id = _id;
         this.state = _state;
+        this.description="";
+        this.data_time = new Time(28,7,1996,11,59,0,28,7,2100,11,59,0);
     }
     public void printLineSep(int n){for(int i=0; i<n; i++){System.out.print("-");}System.out.print("\n");}
     public void printAllInfos(){
@@ -45,10 +52,13 @@ public class Projetos{
     public void setUsers(ArrayList<User> n){this.users=n;}
     public void setCoord(String n){this.prof_or_research=n;}
     public void setStatus(int n){this.state=n;}
+    public void setDescription(String n){this.description=n;}
     public int getStatus(){return this.state;}
     public int getID(){return this.id;}
     public String getTask(){return this.task;}
     public String getCoord(){return this.prof_or_research;}
+    public String getDescription()
+    {if (this.description.equals("")==false){return this.description;}else{return "\nDescrição não informada.";}}
     public int getUser(String user_searched){
         int acc = 0;
         while(this.users.get(acc).getName().equals("-1")!=true){
@@ -79,6 +89,7 @@ public class Projetos{
         else if(this.state==2){return "Em andamento";}
         return "Concluído";
     }
+    public Time getData(){return this.data_time;}
     public boolean userExist(User user_name){
         int acc = 0;
         while ((this.users.get(acc).getName()).equals("-1")!=true){
