@@ -33,12 +33,19 @@ public class Manager extends Projetos implements MainManager{
         System.out.println("Digite 14 para atribuir um valor de bolsa a uma(um) usuária(o).");
         System.out.println("Digite 15 para adicionar uma descrição a um projeto.");
         System.out.println("Digite 16 para definir data de inicio e término de um projeto.");
+        // System.out.println("Digite 17 para adicionar uma atividade a um projeto.");
         System.out.println("Digite 0 para sair do programa.");
     }
     public static int taskExist(String task){
         int idt = -1;
         for (int i=0; i<acc_projects; i++){
-            if (projects.get(i).getID()!=-1 && projects.get(i).getTask().equals(task)==true){idt=i;break;}
+            if (projects.get(i).getID()!=-1 && projects.get(i).getActivities()!=null){
+                ArrayList<Activitie> acts = projects.get(i).getActivities();
+                for (int j=0; j<acts.size(); ++j)
+                {
+                    if(acts.get(j).getDescription().equals(task)){idt=j;break;}
+                }
+            }
         }
         return idt;
     }
@@ -77,7 +84,7 @@ public class Manager extends Projetos implements MainManager{
             String email1 = "";
             email1 = opt.nextLine();
 
-            System.out.print("Digite se a(o) "+(acc+1)+"ª usuária(o) é aluna(o), professora(or) ou pesquisadora(or): ");
+            System.out.print("Digite se a(o) "+(acc+1)+"ª usuária(o) é graduanda(o), mestranda(o), doutoranda(o), técnica(o), desenvolvedora(or), testadora(or), analista, professora(or) ou pesquisadora(or): ");
             UserStatus type = UserStatus.valueOf(opt.nextLine().toUpperCase());
 
             scan1.add(new User(name1, email1, "123", type, 0.0, AllocatorStatus.DEFINITIVE));
@@ -120,10 +127,24 @@ public class Manager extends Projetos implements MainManager{
                 System.out.print("Descrição: ");
                 System.out.println(projects.get(i).getDescription());
 
-                System.out.print("Data de inicio: ");
+                System.out.print("Data de inicio da(s) bolsa(s): ");
                 System.out.println(projects.get(i).getData().getDataCreationString());
-                System.out.print("Data de término: ");
+                System.out.print("Data de término da(s) bolsa(s): ");
                 System.out.println(projects.get(i).getData().getDataTerminateString());
+                
+                System.out.println();
+                System.out.println("Atividades:");
+                for (int j=0; j<projects.get(i).getActsLenght(); j++){
+                    Activitie acts = projects.get(i).getActivities().get(j);
+                    int have_act = projects.get(i).getActivitieIndex(j);
+                    if (have_act!=-1){
+                        System.out.println("   ID da tarefa: "+have_act);
+                        System.out.println("   Descrição: "+acts.getDescription());
+                        System.out.println("   Responsável: "+acts.getResponsable());
+                        System.out.println("   Tempo de duração: "+acts.getDataCreationString()+
+                        " à "+acts.getDataTerminateString());
+                    }
+                }
 
                 printLineSep(spaces);
             }
@@ -166,14 +187,29 @@ public class Manager extends Projetos implements MainManager{
                     System.out.println("Digite a(o) coordenadora(or):");
                     String scan2;    
                     scan2 = opt.nextLine();
+                    
+                    System.out.println("Quantas tarefas terão esse projeto?");
+                    int n_tasks = 0;
+                    n_tasks = Integer.parseInt(opt.nextLine());
+                    ArrayList<Activitie> acts = new ArrayList<>();
+                    for (int i=0; i<n_tasks; ++i)
+                    {
+                        System.out.println("Digite os dados da "+(i+1)+"ª atividade:");
+                        String describe;
+                        String responsa;
+                        System.out.println("Digite a descrição da tarefa:");
+                        describe = opt.nextLine();
+                        System.out.println("Digite a(o) responsável pela tarefa:");
+                        responsa = opt.nextLine();
+                        acts.add(new Activitie(describe, responsa));
+                    }
 
-                    projects.add(new Projetos(acc_projects, scan0, scan1, scan2));
-                    // acc_projects++;
+                    projects.add(new Projetos(acc_projects, scan0, scan1, scan2, acts));
 
                     projects.get(acc_projects).printAllInfos();
                     acc_projects += 1;
                     // opt.nextLine();
-                } catch (NullPointerException e) {
+                } catch (NullPointerException | StringIndexOutOfBoundsException e) {
                     System.out.println("Erro em alguma entrada: "+e+" Tente novamente.");
                 } catch (NumberFormatException e){
                     System.out.println("Erro em alguma entrada: "+e+" Tente novamente.");
@@ -285,34 +321,42 @@ public class Manager extends Projetos implements MainManager{
                 else{System.out.println("Erro. Projeto não existe ou usuária(o) não existe.");}
             }
             else if (option==7){
-                System.out.println("Escolhida a opção 7.");
-                
-                System.out.println("Digite uma atividade:");
-                // opt.nextLine();
-                String task = opt.nextLine();
-                System.out.println("Digite uma(um) usuária(o) para associar:");
-                User user7 = new User(opt.nextLine());
-                int id7 = taskExist(task);
-                if (id7!=-1 && projects.get(id7).userExist(user7)!=true){
-                    projects.get(id7).addUser(user7);
+                try{
+                    System.out.println("Escolhida a opção 7.");
+                    
+                    System.out.println("Digite o ID de um projeto:");
+                    // opt.nextLine();
+                    int id_project = Integer.parseInt(opt.nextLine());
+                    System.out.println("Digite uma tarefa:");
+                    String task = opt.nextLine();
+                    System.out.println("Digite uma(um) usuária(o) para associar:");
+                    User user7 = new User(opt.nextLine());
+                    int id7 = taskExist(task);
+                    // if (id7!=-1 && projects.get(id_project).userExist(user7)!=true){
+                    projects.get(id_project).getActivities().get(id7).addUserAtTask(user7);
                     System.out.println("Usuária(o) "+user7.getName()+" foi associada(o).");
+                    // }
+                    // else{System.out.println("Erro. Atividade não existe ou usuária(o) já esta associada(o).");}
+                }catch(NumberFormatException | NullPointerException e){
+                    System.out.println("Projeto não existe, usuária(o) já associada(o) ou tarefa não existe. Erro: "+e);
                 }
-                else{System.out.println("Erro. Atividade não existe ou usuária(o) já esta associada(o).");}
             }
             else if (option==8){
                 System.out.println("Escolhida a opção 8.");
 
-                System.out.println("Digite uma(um) usuária(o) para ser associada(o):");
-                // opt.nextLine();
-                User user8 = new User(opt.nextLine().toUpperCase());
-                System.out.println("Digite uma atividade para associar:");
-                String task8 = opt.nextLine();
-                int id8 = taskExist(task8);
-                if (id8!=-1 && projects.get(id8).userExist(user8)==false){
+                try{
+                    System.out.println("Digite uma(um) usuária(o) para ser associada(o):");
+                    // opt.nextLine();
+                    User user8 = new User(opt.nextLine());
+                    System.out.println("Digite uma atividade para associar:");
+                    String task8 = opt.nextLine();
+                    int id8 = taskExist(task8);
                     projects.get(id8).addUser(user8);
                     System.out.println("Usuária(o) "+user8.getName()+" foi associada(o).");
                 }
-                else{System.out.println("Erro. Usuário já associado a atividade ou atividade não existe.");}
+                catch(NullPointerException | IndexOutOfBoundsException e){
+                    System.out.println("Erro. Usuária(o) já associada(o) a atividade ou atividade não existe.");
+                }
             }
             else if (option==9){
                 System.out.println("Escolhida a opção 9.");

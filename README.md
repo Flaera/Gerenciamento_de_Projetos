@@ -16,4 +16,6 @@ Descrição de Code Smells:
 
     - God class em Manager.java;
 
-    - 
+    - taskExist() na classe Manager é um método que poderia estar na classe Projeto, um método invejoso;
+
+    -

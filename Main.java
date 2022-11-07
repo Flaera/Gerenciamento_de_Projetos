@@ -36,7 +36,7 @@ public class Main{
                 System.out.println("Deseja inserir o tipo de usuária(o). Digite \"S\" para sim ou \"N\" para não");
                 String like_status = opt.nextLine().toUpperCase();
                 if (like_status.equals("S")==true){
-                    System.out.println("Digite Aluna(o), Professora(or) ou Pesquisadora(or):");
+                    System.out.print("Digite se a(o) "+(name)+" usuária(o) é graduanda(o), mestranda(o), doutoranda(o), técnica(o), desenvolvedora(or), testadora(or), analista, professora(or) ou pesquisadora(or): ");
                     UserStatus status = UserStatus.valueOf(opt.nextLine().toUpperCase());
                     User new_user = new User(name, email, password, status, 0.0, AllocatorStatus.DEFINITIVE);
                     users[acc_users] = new_user;
