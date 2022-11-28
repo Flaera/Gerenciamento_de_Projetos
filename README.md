@@ -14,8 +14,25 @@ Para executar o programa:
 
 Descrição de Code Smells:
 
+
     - God class em Manager.java;
+
 
     - taskExist() na classe Manager é um método que poderia estar na classe Projeto, um método invejoso;
 
-    -
+
+    - printAllinfos na classe Manager é um método invejoso. Ele pega muitas coisas das classes Projetos e Activitie;
+
+
+Tratamento com Design Patterns:
+
+
+    - A Large Class/God Class em Manager foi criada uma classe para cada opção do menu pelo padrão Command minimizando o tamanho da classe Manager que antes tinha 538 linhas e passou a ter com o Command 231 linhas. Dentre as classes criadas estão SetDateTime(), RemoveProjectManager() e InterchangeUser(). Isso aumentou muito o número de classes;
+
+
+    - O método taskExist() foi movido para a classe Projeto() e refatorado minimizando as linhas do mesmo. Ou seja, utilizou-se o design pattern Extract Method;
+
+
+    - printAllInfos() em override na classe Manager() teve código extraído em método menores utilizando o design pattern Extract Method. Os métodos criados foram os printActs() e o printInfoUser();
+
+    

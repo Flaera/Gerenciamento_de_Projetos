@@ -47,6 +47,9 @@ public class User extends People{
     public void setPayment(Double bag_or_payment){this.payment = bag_or_payment;}
     public void setAllocStatus(AllocatorStatus as){this.alloc_status=as;}
     public void setTimePaymentDuration(Time n){this.payment_duration=n;}
+    public String printInfoUser(){
+        return getName()+" "+"("+getEmail()+", "+getPayment()+", "+getStatus()+", "+getAllocStatus()+")";
+    }
     public static void main(String[] args){
         return;
     }
