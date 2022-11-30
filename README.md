@@ -21,7 +21,9 @@ Descrição de Code Smells:
     - taskExist() na classe Manager é um método que poderia estar na classe Projeto, um método invejoso;
 
 
-    - printAllinfos na classe Manager é um método invejoso. Ele pega muitas coisas das classes Projetos e Activitie;
+    - printAllinfos na classe Manager é um método invejoso. Ele pega muitas coisas das classes Projetos e Activitie; e
+
+    - Encontrado Large Paramet List no construtor da classe Time().
 
 
 Tratamento com Design Patterns:
